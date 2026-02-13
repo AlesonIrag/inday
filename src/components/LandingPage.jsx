@@ -193,11 +193,10 @@ function LandingPage({ onStart }) {
 
       <div className="photo-background">
         {loadedImages.map((image, index) => (
-          <img 
+          <div
             key={index}
-            src={image} 
-            alt="My Love" 
             className={`slideshow-image ${index === currentImageIndex ? 'active' : ''}`}
+            style={{ backgroundImage: `url(${image})` }}
           />
         ))}
         <div className="photo-overlay"></div>
