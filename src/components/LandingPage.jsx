@@ -192,14 +192,32 @@ function LandingPage({ onStart }) {
       </div>
 
       <div className="photo-background">
-        {loadedImages.map((image, index) => (
-          <img
-            key={index}
-            src={image}
-            alt="Slideshow"
-            className={`slideshow-image ${index === currentImageIndex ? 'active' : ''}`}
-          />
-        ))}
+        {loadedImages.length === 0 ? (
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            background: 'linear-gradient(135deg, #ff69b4, #ff1493)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'white',
+            fontSize: '24px'
+          }}>
+            Loading images...
+          </div>
+        ) : (
+          loadedImages.map((image, index) => (
+            <img
+              key={index}
+              src={image}
+              alt="Slideshow"
+              className={`slideshow-image ${index === currentImageIndex ? 'active' : ''}`}
+            />
+          ))
+        )}
         <div className="photo-overlay"></div>
       </div>
       
