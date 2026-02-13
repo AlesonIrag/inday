@@ -36,8 +36,12 @@ function App() {
   useEffect(() => {
     const attemptAutoplay = async () => {
       try {
+        // Set volume lower for mobile autoplay
+        audio.volume = 0.5
         await audio.play()
         setIsPlaying(true)
+        // Gradually increase volume
+        setTimeout(() => { audio.volume = 0.7 }, 1000)
         console.log('Autoplay successful!')
       } catch (error) {
         console.log('Autoplay blocked, showing music prompt:', error)
@@ -45,41 +49,51 @@ function App() {
       }
     }
     
-    // Small delay to ensure DOM is ready
-    const timer = setTimeout(attemptAutoplay, 500)
+    // Try immediately
+    attemptAutoplay()
+    
+    // Also try after a short delay for mobile
+    const timer = setTimeout(attemptAutoplay, 300)
     
     return () => clearTimeout(timer)
   }, [audio])
 
   // Handle enabling music when user clicks the prompt
   const enableMusic = () => {
+    audio.volume = 0.7
     audio.play().catch(e => console.log('Play failed:', e))
     setIsPlaying(true)
     setShowMusicPrompt(false)
   }
 
-  // Start playing music on first user interaction
+  // Start playing music on first user interaction (backup for mobile)
   useEffect(() => {
     const handleFirstInteraction = () => {
       if (!isPlaying) {
+        audio.volume = 0.7
         audio.play().catch((error) => {
           console.log('Autoplay prevented:', error)
+          setShowMusicPrompt(true)
+        }).then(() => {
+          setIsPlaying(true)
+          setShowMusicPrompt(false)
         })
-        setIsPlaying(true)
-        setShowMusicPrompt(false)
       }
-      // Remove listeners after first successful play
+      // Remove listeners after first attempt
       document.removeEventListener('click', handleFirstInteraction)
       document.removeEventListener('touchstart', handleFirstInteraction)
+      document.removeEventListener('touchend', handleFirstInteraction)
     }
     
-    // Listen for both click and touch events for mobile support
-    document.addEventListener('click', handleFirstInteraction)
-    document.addEventListener('touchstart', handleFirstInteraction)
+    // Listen for click, touch events for mobile support
+    document.addEventListener('click', handleFirstInteraction, { passive: true })
+    document.addEventListener('touchstart', handleFirstInteraction, { passive: true })
+    document.addEventListener('touchend', handleFirstInteraction, { passive: true })
     
     return () => {
       document.removeEventListener('click', handleFirstInteraction)
       document.removeEventListener('touchstart', handleFirstInteraction)
+      document.removeEventListener('touchend', handleFirstInteraction)
     }
   }, [audio, isPlaying])
 
