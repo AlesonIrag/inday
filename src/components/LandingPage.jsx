@@ -77,8 +77,10 @@ function LandingPage({ onStart }) {
 
   useEffect(() => {
     // Load all images immediately
-    setLoadedImages(images)
-    setTimeout(() => setShowText(true), 1500)
+    console.log('Loading images:', images);
+    setLoadedImages(images);
+    console.log('Images loaded, count:', images.length);
+    setTimeout(() => setShowText(true), 1500);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -192,13 +194,16 @@ function LandingPage({ onStart }) {
       </div>
 
       <div className="photo-background">
-        {loadedImages.map((image, index) => (
-          <div
-            key={index}
-            className={`slideshow-image ${index === currentImageIndex ? 'active' : ''}`}
-            style={{ backgroundImage: `url(${image})` }}
-          />
-        ))}
+        {loadedImages.map((image, index) => {
+          console.log('Rendering slideshow image:', image, 'index:', index, 'active:', index === currentImageIndex);
+          return (
+            <div
+              key={index}
+              className={`slideshow-image ${index === currentImageIndex ? 'active' : ''}`}
+              style={{ backgroundImage: `url(${image})` }}
+            />
+          );
+        })}
         <div className="photo-overlay"></div>
       </div>
       
