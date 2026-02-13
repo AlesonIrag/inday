@@ -100,7 +100,7 @@ function LandingPage({ onStart }) {
 
   useEffect(() => {
     if (loadedImages.length > 1) {
-      // Slideshow timer - change image every 5 seconds for elegant viewing
+      // Start slideshow immediately - change image every 5 seconds
       const interval = setInterval(() => {
         setCurrentImageIndex((prevIndex) => (prevIndex + 1) % loadedImages.length)
       }, 5000)
@@ -224,7 +224,7 @@ function LandingPage({ onStart }) {
       
       {showText && (
         <div className="subtle-text" onClick={onStart}>
-          <span className="button-text-default">Open it my inday 🎵</span>
+          <span className="button-text-default">Open it inday♡</span>
           <span className="button-text-hover">I love you ♡</span>
         </div>
       )}

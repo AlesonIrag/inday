@@ -14,6 +14,8 @@ function App() {
   const [currentSection, setCurrentSection] = useState('letter')
   const [currentBgImage, setCurrentBgImage] = useState(0)
   const [currentSongIndex, setCurrentSongIndex] = useState(0)
+  const [showMusicPrompt, setShowMusicPrompt] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false)
 
   const bgImages = ['/fd.jpeg', '/sd.jpg', '/td.jpg', '/sr.jpeg']
 
@@ -30,12 +32,42 @@ function App() {
     return audioEl
   })
 
+  // Try to autoplay music immediately when app loads
+  useEffect(() => {
+    const attemptAutoplay = async () => {
+      try {
+        await audio.play()
+        setIsPlaying(true)
+        console.log('Autoplay successful!')
+      } catch (error) {
+        console.log('Autoplay blocked, showing music prompt:', error)
+        setShowMusicPrompt(true)
+      }
+    }
+    
+    // Small delay to ensure DOM is ready
+    const timer = setTimeout(attemptAutoplay, 500)
+    
+    return () => clearTimeout(timer)
+  }, [audio])
+
+  // Handle enabling music when user clicks the prompt
+  const enableMusic = () => {
+    audio.play().catch(e => console.log('Play failed:', e))
+    setIsPlaying(true)
+    setShowMusicPrompt(false)
+  }
+
   // Start playing music on first user interaction
   useEffect(() => {
     const handleFirstInteraction = () => {
-      audio.play().catch((error) => {
-        console.log('Autoplay prevented:', error)
-      })
+      if (!isPlaying) {
+        audio.play().catch((error) => {
+          console.log('Autoplay prevented:', error)
+        })
+        setIsPlaying(true)
+        setShowMusicPrompt(false)
+      }
       // Remove listeners after first successful play
       document.removeEventListener('click', handleFirstInteraction)
       document.removeEventListener('touchstart', handleFirstInteraction)
@@ -49,7 +81,7 @@ function App() {
       document.removeEventListener('click', handleFirstInteraction)
       document.removeEventListener('touchstart', handleFirstInteraction)
     }
-  }, [audio])
+  }, [audio, isPlaying])
 
   // Handle song changes
   useEffect(() => {
@@ -83,9 +115,13 @@ function App() {
 
   const handleStart = () => {
     // Ensure audio plays when user clicks the landing page button
-    audio.play().catch((error) => {
-      console.log('Audio play failed:', error)
-    })
+    if (!isPlaying) {
+      audio.play().catch((error) => {
+        console.log('Audio play failed:', error)
+      })
+      setIsPlaying(true)
+      setShowMusicPrompt(false)
+    }
     setShowFlowers(true)
   }
 
@@ -129,6 +165,16 @@ function App() {
       <FloatingHearts />
       {showFlowers && <FloatingFlowers />}
       
+      {/* Music prompt overlay if autoplay is blocked */}
+      {showMusicPrompt && (
+        <div className="music-prompt-overlay" onClick={enableMusic}>
+          <div className="music-prompt">
+            <div className="music-icon">🎵</div>
+            <p>Click anywhere to play music</p>
+          </div>
+        </div>
+      )}
+      
       {!started && !showSelection && !showFlowers ? (
         <LandingPage onStart={handleStart} />
       ) : !started && (showSelection || showFlowers) ? (
@@ -151,7 +197,7 @@ function App() {
               <div className="flowers-content">
                 <h1 className="flowers-message">Happy Valentine's Day, Inday♡</h1>
                 <button className="continue-button" onClick={handleContinue}>
-                  <span className="button-text-default">Hover your mouse</span>
+                  <span className="button-text-default">Long press Inday</span>
                   <span className="button-text-hover">I love You, Inday♡</span>
                 </button>
               </div>
