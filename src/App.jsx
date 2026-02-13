@@ -30,26 +30,24 @@ function App() {
     return audioEl
   })
 
-  // Start playing music immediately when app loads
+  // Start playing music on first user interaction
   useEffect(() => {
-    const startMusic = () => {
+    const handleFirstInteraction = () => {
       audio.play().catch((error) => {
         console.log('Autoplay prevented:', error)
       })
+      // Remove listeners after first successful play
+      document.removeEventListener('click', handleFirstInteraction)
+      document.removeEventListener('touchstart', handleFirstInteraction)
     }
     
-    startMusic()
-    
-    // Try to start on first user interaction if autoplay blocked
-    const handleInteraction = () => {
-      audio.play().catch(e => console.log('Play failed:', e))
-      document.removeEventListener('click', handleInteraction, { once: true })
-    }
-    
-    document.addEventListener('click', handleInteraction, { once: true })
+    // Listen for both click and touch events for mobile support
+    document.addEventListener('click', handleFirstInteraction)
+    document.addEventListener('touchstart', handleFirstInteraction)
     
     return () => {
-      document.removeEventListener('click', handleInteraction)
+      document.removeEventListener('click', handleFirstInteraction)
+      document.removeEventListener('touchstart', handleFirstInteraction)
     }
   }, [audio])
 
@@ -84,6 +82,10 @@ function App() {
   }, [])
 
   const handleStart = () => {
+    // Ensure audio plays when user clicks the landing page button
+    audio.play().catch((error) => {
+      console.log('Audio play failed:', error)
+    })
     setShowFlowers(true)
   }
 
