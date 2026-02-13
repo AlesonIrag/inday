@@ -4,6 +4,7 @@ import './LandingPage.css'
 function LandingPage({ onStart }) {
   const [showText, setShowText] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [loadedImages, setLoadedImages] = useState([])
   
   // Add your images here - put them in the public folder
   const images = [
@@ -75,18 +76,22 @@ function LandingPage({ onStart }) {
   })), [])
 
   useEffect(() => {
-    // Start slideshow immediately
+    // Load all images immediately
+    setLoadedImages(images)
     setTimeout(() => setShowText(true), 1500)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
-    // Start slideshow immediately - change image every 5 seconds
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length)
-    }, 5000)
-    
-    return () => clearInterval(interval)
-  }, [images.length])
+    if (loadedImages.length > 1) {
+      // Start slideshow - change image every 5 seconds
+      const interval = setInterval(() => {
+        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % loadedImages.length)
+      }, 5000)
+      
+      return () => clearInterval(interval)
+    }
+  }, [loadedImages.length])
 
   return (
     <div className="landing-page">
@@ -187,13 +192,12 @@ function LandingPage({ onStart }) {
       </div>
 
       <div className="photo-background">
-        {images.map((image, index) => (
-          <div
+        {loadedImages.map((image, index) => (
+          <img 
             key={index}
+            src={image} 
+            alt="My Love" 
             className={`slideshow-image ${index === currentImageIndex ? 'active' : ''}`}
-            style={{
-              backgroundImage: `url(${image})`
-            }}
           />
         ))}
         <div className="photo-overlay"></div>
