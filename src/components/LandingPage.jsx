@@ -76,24 +76,8 @@ function LandingPage({ onStart }) {
   })), [])
 
   useEffect(() => {
-    // Check which images are available
-    const checkImages = async () => {
-      const available = []
-      for (const img of images) {
-        try {
-          const response = await fetch(img, { method: 'HEAD' })
-          if (response.ok) {
-            available.push(img)
-          }
-        } catch {
-          // Image not found, skip it
-        }
-      }
-      // If no images loaded, use at least the first one
-      setLoadedImages(available.length > 0 ? available : [images[0]])
-    }
-    
-    checkImages()
+    // Set all images as loaded immediately - no checking
+    setLoadedImages(images)
     setTimeout(() => setShowText(true), 1500)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -214,8 +198,10 @@ function LandingPage({ onStart }) {
             src={image} 
             alt="My Love" 
             className={`slideshow-image ${index === currentImageIndex ? 'active' : ''}`}
-            onError={(e) => {
-              e.target.style.display = 'none'
+            loading="eager"
+            style={{
+              display: 'block',
+              visibility: 'visible'
             }}
           />
         ))}
