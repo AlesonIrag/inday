@@ -29,71 +29,89 @@ function App() {
     const audioEl = new Audio(playlist[0])
     audioEl.volume = 0.7
     audioEl.loop = false
+    audioEl.preload = 'auto'
     return audioEl
   })
 
-  // Try to autoplay music immediately when app loads
+  // AGGRESSIVE autoplay - try muted first, then unmute (works on mobile)
   useEffect(() => {
     const attemptAutoplay = async () => {
       try {
-        // Set volume lower for mobile autoplay
+        // Try playing with sound first
         audio.volume = 0.5
+        audio.muted = false
         await audio.play()
         setIsPlaying(true)
-        // Gradually increase volume
         setTimeout(() => { audio.volume = 0.7 }, 1000)
-        console.log('Autoplay successful!')
+        console.log('Autoplay with sound successful!')
       } catch (error) {
-        console.log('Autoplay blocked, showing music prompt:', error)
-        setShowMusicPrompt(true)
+        console.log('Autoplay with sound blocked, trying muted:', error)
+        try {
+          // Try muted autoplay (allowed on mobile)
+          audio.muted = true
+          await audio.play()
+          // Unmute after a tiny delay
+          setTimeout(() => {
+            audio.muted = false
+            audio.volume = 0.7
+            setIsPlaying(true)
+            console.log('Muted autoplay successful, unmuted!')
+          }, 100)
+        } catch (mutedError) {
+          console.log('Even muted autoplay blocked:', mutedError)
+          setShowMusicPrompt(true)
+        }
       }
     }
     
-    // Try immediately
+    // Try multiple times
     attemptAutoplay()
+    const timer1 = setTimeout(attemptAutoplay, 100)
+    const timer2 = setTimeout(attemptAutoplay, 500)
+    const timer3 = setTimeout(attemptAutoplay, 1000)
     
-    // Also try after a short delay for mobile
-    const timer = setTimeout(attemptAutoplay, 300)
-    
-    return () => clearTimeout(timer)
+    return () => {
+      clearTimeout(timer1)
+      clearTimeout(timer2)
+      clearTimeout(timer3)
+    }
   }, [audio])
 
   // Handle enabling music when user clicks the prompt
   const enableMusic = () => {
+    audio.muted = false
     audio.volume = 0.7
     audio.play().catch(e => console.log('Play failed:', e))
     setIsPlaying(true)
     setShowMusicPrompt(false)
   }
 
-  // Start playing music on first user interaction (backup for mobile)
+  // Start playing music on ANY user interaction (backup for mobile)
   useEffect(() => {
     const handleFirstInteraction = () => {
       if (!isPlaying) {
+        audio.muted = false
         audio.volume = 0.7
-        audio.play().catch((error) => {
-          console.log('Autoplay prevented:', error)
-          setShowMusicPrompt(true)
-        }).then(() => {
+        audio.play().then(() => {
           setIsPlaying(true)
           setShowMusicPrompt(false)
+          console.log('Music started on user interaction!')
+        }).catch((error) => {
+          console.log('Play on interaction failed:', error)
         })
       }
-      // Remove listeners after first attempt
-      document.removeEventListener('click', handleFirstInteraction)
-      document.removeEventListener('touchstart', handleFirstInteraction)
-      document.removeEventListener('touchend', handleFirstInteraction)
     }
     
-    // Listen for click, touch events for mobile support
-    document.addEventListener('click', handleFirstInteraction, { passive: true })
-    document.addEventListener('touchstart', handleFirstInteraction, { passive: true })
-    document.addEventListener('touchend', handleFirstInteraction, { passive: true })
+    // Listen for ALL possible interaction events
+    const events = ['click', 'touchstart', 'touchend', 'touchmove', 'scroll', 'keydown']
+    events.forEach(event => {
+      document.addEventListener(event, handleFirstInteraction, { once: true, passive: true })
+    })
     
     return () => {
-      document.removeEventListener('click', handleFirstInteraction)
-      document.removeEventListener('touchstart', handleFirstInteraction)
-      document.removeEventListener('touchend', handleFirstInteraction)
+      events.forEach(event => {
+        document.removeEventListener(event, handleFirstInteraction)
+      })
     }
   }, [audio, isPlaying])
 
