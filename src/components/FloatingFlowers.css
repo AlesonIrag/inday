@@ -1,0 +1,59 @@
+.floating-flowers {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 999;
+  animation: fadeInFlowers 1s ease-in;
+}
+
+.flower {
+  position: absolute;
+  bottom: -100px;
+  animation: floatUpFlower linear infinite;
+  opacity: 0;
+  filter: drop-shadow(0 0 10px rgba(255, 105, 180, 0.6));
+}
+
+@keyframes fadeInFlowers {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes floatUpFlower {
+  0% {
+    bottom: -100px;
+    opacity: 0;
+    transform: translateX(0) rotate(0deg) scale(0.5);
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    bottom: 110%;
+    opacity: 0;
+    transform: translateX(150px) rotate(720deg) scale(1.2);
+  }
+}
+
+@media (max-width: 768px) {
+  .flower {
+    font-size: 25px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .flower {
+    font-size: 20px !important;
+  }
+}
