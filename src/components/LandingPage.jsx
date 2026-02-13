@@ -4,7 +4,6 @@ import './LandingPage.css'
 function LandingPage({ onStart }) {
   const [showText, setShowText] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [loadedImages, setLoadedImages] = useState([])
   
   // Add your images here - put them in the public folder
   const images = [
@@ -76,22 +75,18 @@ function LandingPage({ onStart }) {
   })), [])
 
   useEffect(() => {
-    // Set all images as loaded immediately - no checking
-    setLoadedImages(images)
+    // Start slideshow immediately
     setTimeout(() => setShowText(true), 1500)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
-    if (loadedImages.length > 1) {
-      // Start slideshow immediately - change image every 5 seconds
-      const interval = setInterval(() => {
-        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % loadedImages.length)
-      }, 5000)
-      
-      return () => clearInterval(interval)
-    }
-  }, [loadedImages.length])
+    // Start slideshow immediately - change image every 5 seconds
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length)
+    }, 5000)
+    
+    return () => clearInterval(interval)
+  }, [images.length])
 
   return (
     <div className="landing-page">
@@ -192,16 +187,15 @@ function LandingPage({ onStart }) {
       </div>
 
       <div className="photo-background">
-        {loadedImages.map((image, index) => (
-          <img 
+        {images.map((image, index) => (
+          <div
             key={index}
-            src={image} 
-            alt="My Love" 
             className={`slideshow-image ${index === currentImageIndex ? 'active' : ''}`}
-            loading="eager"
             style={{
-              display: 'block',
-              visibility: 'visible'
+              backgroundImage: `url(${image})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
             }}
           />
         ))}
