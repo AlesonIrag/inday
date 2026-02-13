@@ -59,7 +59,7 @@ function App() {
           }, 100)
         } catch (mutedError) {
           console.log('Even muted autoplay blocked:', mutedError)
-          setShowMusicPrompt(true)
+          // Music will play on first user interaction
         }
       }
     }
@@ -77,13 +77,12 @@ function App() {
     }
   }, [audio])
 
-  // Handle enabling music when user clicks the prompt
+  // Handle enabling music when user clicks
   const enableMusic = () => {
     audio.muted = false
     audio.volume = 0.7
     audio.play().catch(e => console.log('Play failed:', e))
     setIsPlaying(true)
-    setShowMusicPrompt(false)
   }
 
   // Start playing music on ANY user interaction (backup for mobile)
@@ -94,7 +93,6 @@ function App() {
         audio.volume = 0.7
         audio.play().then(() => {
           setIsPlaying(true)
-          setShowMusicPrompt(false)
           console.log('Music started on user interaction!')
         }).catch((error) => {
           console.log('Play on interaction failed:', error)
@@ -152,7 +150,6 @@ function App() {
         console.log('Audio play failed:', error)
       })
       setIsPlaying(true)
-      setShowMusicPrompt(false)
     }
     setShowFlowers(true)
   }
@@ -196,16 +193,6 @@ function App() {
     <div className="app">
       <FloatingHearts />
       {showFlowers && <FloatingFlowers />}
-      
-      {/* Music prompt overlay if autoplay is blocked */}
-      {showMusicPrompt && (
-        <div className="music-prompt-overlay" onClick={enableMusic}>
-          <div className="music-prompt">
-            <div className="music-icon">🎵</div>
-            <p>Click anywhere to play music</p>
-          </div>
-        </div>
-      )}
       
       {!started && !showSelection && !showFlowers ? (
         <LandingPage onStart={handleStart} />
