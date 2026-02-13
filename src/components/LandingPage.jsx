@@ -198,6 +198,7 @@ function LandingPage({ onStart }) {
             src={image} 
             alt="My Love" 
             className={`slideshow-image ${index === currentImageIndex ? 'active' : ''}`}
+            style={{ display: 'block' }}
           />
         ))}
         <div className="photo-overlay"></div>
