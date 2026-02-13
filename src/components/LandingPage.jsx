@@ -192,10 +192,7 @@ function LandingPage({ onStart }) {
             key={index}
             className={`slideshow-image ${index === currentImageIndex ? 'active' : ''}`}
             style={{
-              backgroundImage: `url(${image})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat'
+              backgroundImage: `url(${image})`
             }}
           />
         ))}
