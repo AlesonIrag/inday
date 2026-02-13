@@ -33,7 +33,7 @@ function App() {
     return audioEl
   })
 
-  // AGGRESSIVE autoplay - try muted first, then unmute (works on mobile)
+  // SUPER AGGRESSIVE autoplay - try muted first, then unmute (works on mobile)
   useEffect(() => {
     const attemptAutoplay = async () => {
       try {
@@ -44,6 +44,7 @@ function App() {
         setIsPlaying(true)
         setTimeout(() => { audio.volume = 0.7 }, 1000)
         console.log('Autoplay with sound successful!')
+        return true
       } catch (error) {
         console.log('Autoplay with sound blocked, trying muted:', error)
         try {
@@ -56,24 +57,31 @@ function App() {
             audio.volume = 0.7
             setIsPlaying(true)
             console.log('Muted autoplay successful, unmuted!')
-          }, 100)
+          }, 50)
+          return true
         } catch (mutedError) {
           console.log('Even muted autoplay blocked:', mutedError)
-          // Music will play on first user interaction
+          return false
         }
       }
     }
     
-    // Try multiple times
+    // Try MANY times at different intervals
     attemptAutoplay()
-    const timer1 = setTimeout(attemptAutoplay, 100)
-    const timer2 = setTimeout(attemptAutoplay, 500)
-    const timer3 = setTimeout(attemptAutoplay, 1000)
+    const timer1 = setTimeout(attemptAutoplay, 50)
+    const timer2 = setTimeout(attemptAutoplay, 100)
+    const timer3 = setTimeout(attemptAutoplay, 300)
+    const timer4 = setTimeout(attemptAutoplay, 500)
+    const timer5 = setTimeout(attemptAutoplay, 1000)
+    const timer6 = setTimeout(attemptAutoplay, 2000)
     
     return () => {
       clearTimeout(timer1)
       clearTimeout(timer2)
       clearTimeout(timer3)
+      clearTimeout(timer4)
+      clearTimeout(timer5)
+      clearTimeout(timer6)
     }
   }, [audio])
 
