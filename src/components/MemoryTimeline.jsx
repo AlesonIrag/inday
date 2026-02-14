@@ -39,8 +39,16 @@ function MemoryTimeline() {
       description: 'Gamayng oras tilokon makauban lang ka',
       image: '/td.jpg',
       story: 'Kani nga time kay first hatag nako flower "napay daghan puhon" first time na ko maong wakoy idea unsaon paghatag gisunod nalang nako sa tiktok sud2 sa ubox HAHAHA, nindut sad kayni nga date kay wajud planohi ba "managgkot man tu ang plano" pag uli pwerteng basaa natu duha, ayaw kabalaka dina ta mabasa puhon kay palit tag raptor, land cruiser og alphard HAHAHAHAHA',    },
-    
-     {
+{
+      id: 4,
+      date: 'February 14, 2026',
+      title: 'Fourth Date',
+      icon: '/ww.jpeg',
+      description: 'Happy Valentines Day!',
+      image: '/ww.jpeg',
+      story: 'Happy Valentines Day, Inday! abi jud nakog di ta madayun HAHAHAHAH guol pa kayko abi kog di ta madayun kay ni ana kag "di ko palakwon ni mama" HAHAHAH TBH nag ampo jud ko madayun lang ta nya dako kaykog pasalamat kay gi dungog akong gi ampo nga madayun ta. Anyways, happy kaykooo promiseee, first time pud nako maka date sa valentines day and happy ko kayko jud as in walay kabutangan "tawga lang kog oa HAHAHA" I love you, inday!!! ' , } ,
+     { 
+
       id: 5,
       date: 'January 30, 2026',
       title: 'Angry you',
@@ -48,7 +56,24 @@ function MemoryTimeline() {
       description: 'Ka scary',
       image: '/n.jpg',
        story: 'Hadlok jud kayka maglagut HAHAHAHA ay astig man ko nganong mahadlok man ko?????? joke HAHAHAHAAHAHA astig ras barkada pero di nimo. pulong pa bitawng ate belen "salbahis kayna, og maldita ko mas pa na" pero atubangon japun ko na imong ka maldita lisud raba kayka lambingon HAHAHAHAHA',     },
-    {
+   
+   { 
+
+      id: 5,
+      title: 'Flowers',
+      icon: '/fd.jpg',
+      description: 'My happiness',
+      image: '/fd.jpg',
+       story: 'Happy jud kayko nga mohatag ko nimo og flowers bisag gamay rana "makahatag ra nya kog mahalon og dagko puhon". Kasabut rajud ko ha nga wa ka maanad no worries about that, okay? that flowers reminds that I love you and you are very important to meee. Thank you, Inday! sa imong genuine nga gipakita nako, so much appreciated!!! ' },
+        { 
+
+      id: 5,
+      title: 'First Story nimo nako ',
+      icon: '/fs.jpg',
+      description: 'KILIG KAAYU HAHAHAHAA',
+      image: '/fs.jpg',
+       story: 'KAKILIGGG KAAAAYUUUUUUU, wajud ko nag expect ana ay HAHAHAHAHA, appreciate kaayu nako daeee. Salamat kaayu indayyyy, very appreciated!!!! ', },
+       {
       id: 7,
       date: 'November 26, 2023',
       title: 'Family yarn?',
