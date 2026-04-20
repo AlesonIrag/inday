@@ -67,11 +67,11 @@ function LoveLetter() {
 
         {/* Romantic Message */}
         <div className="letter-message-card">
-          <h1 className="letter-title">My Inday,</h1>
+          <h1 className="letter-title">My Baby,</h1>
           
           <div className="letter-body">
             <p className="message-paragraph">
-Hi Inday! mag inoa nasad ko ha kay mao man jud imong e sulti ba HAHAHA, di jud bitaw ko kaybaw mo himo letter pero i'll try. Nabuhat ko ni nga system kay mag long last ni as long as di e delete, ganahan ko memorable imong valentines day sa kani nga gamay nga effort, wala man koy mahatag nga flower karun nga valentines pero labaw panis flower , explore this system kay pun'an pa ko ni sa mga umaabut pa natu nga date og mga memories nga mahimo. CHECK THIS SYSTEM EVERYTIME NAA TAY DATE.
+Hi Baby! mag inoa nasad ko ha kay mao man jud imong e sulti ba HAHAHA, di jud bitaw ko kaybaw mo himo letter pero i'll try. Nabuhat ko ni nga system kay mag long last ni as long as di e delete, ganahan ko memorable imong valentines day sa kani nga gamay nga effort, wala man koy mahatag nga flower karun nga valentines pero labaw panis flower , explore this system kay pun'an pa ko ni sa mga umaabut pa natu nga date og mga memories nga mahimo. CHECK THIS SYSTEM EVERYTIME NAA TAY DATE.
 
 
             </p>
@@ -87,7 +87,7 @@ Ayaw na palabig ka stress sa imong kuya ha, if naa ka problem naa rako ha "all e
             </p>
 
             <div className="message-highlight">
-              <p className="highlight-text">Take care always my pretty/beautiful/gorgeous inday/doy. I love youuu!♡ </p>
+              <p className="highlight-text">Take care always my pretty/beautiful/gorgeous Baby. I love youuu!♡ </p>
             </div>
           </div>
 

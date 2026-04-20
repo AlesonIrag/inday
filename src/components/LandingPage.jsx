@@ -234,7 +234,7 @@ function LandingPage({ onStart }) {
       
       {showText && (
         <div className="subtle-text" onClick={onStart}>
-          <span className="button-text-default">Open it inday♡</span>
+          <span className="button-text-default">Open it baby♡</span>
           <span className="button-text-hover">I love you ♡</span>
         </div>
       )}

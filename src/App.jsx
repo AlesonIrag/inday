@@ -222,10 +222,10 @@ function App() {
                 <div className="flowers-bg-overlay"></div>
               </div>
               <div className="flowers-content">
-                <h1 className="flowers-message">Happy Valentine's Day, Inday♡</h1>
+                <h1 className="flowers-message">Happy Valentine's Day, Baby♡</h1>
                 <button className="continue-button" onClick={handleContinue}>
-                  <span className="button-text-default">Long press Inday</span>
-                  <span className="button-text-hover">I love You, Inday♡</span>
+                  <span className="button-text-default">Long press Baby</span>
+                  <span className="button-text-hover">I love You, Baby♡</span>
                 </button>
               </div>
             </div>

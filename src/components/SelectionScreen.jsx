@@ -22,7 +22,7 @@ function SelectionScreen({ onSelect, onBack }) {
         ←
       </button>
       
-      <h1 className="selection-title">Happy Valentine's Day, Inday♡</h1>
+      <h1 className="selection-title">Happy Valentine's Day, Baby♡</h1>
       <p className="selection-subtitle">Pick what you'd like to see</p>
       
       <div className="options-grid">
