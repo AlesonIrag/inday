@@ -8,15 +8,26 @@ function LandingPage({ onStart }) {
   
   // Add your images here - put them in the public folder
   const images = [
+    '/mwa.jpg',
     '/gf.jpeg',
+    '/caf.jpg',
     '/g.png',
+    '/zz.jpg',
+    '/ww.jpeg',
+    '/xx.jpg',
+    '/vv.jpg',
+    '/er.jpg',
     '/v.png',
+    '/uu.jpg',
     '/s.jpeg',
+    '/su.jpg',
     '/qt.png',
+    '/tm.jpg',
     '/q.png',
+    '/bb.jpg',
+    '/qy.jpg',
     '/t.png',
     '/w.png',
-    '/a.png',
   ]
 
   // Generate floating elements for LEFT side only - memoized to prevent reset

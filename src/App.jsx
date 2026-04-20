@@ -17,7 +17,7 @@ function App() {
   const [showMusicPrompt, setShowMusicPrompt] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
 
-  const bgImages = ['/fd.jpeg', '/sd.jpg', '/td.jpg', '/sr.jpeg']
+  const bgImages = ['/fd.jpeg', '/sd.jpg', '/td.jpg', '/sr.jpeg', '/yt.jpg','/aa.jpg','/by.jpg', '/or.jpg', '/mm.jpg', '/gg.jpg']
 
   const playlist = [
     '/Paul Partohap - P.S. I LOVE YOU (Lyric Video).mp3',

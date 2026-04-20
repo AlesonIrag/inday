@@ -81,7 +81,81 @@ function MemoryTimeline() {
       description: 'Feel nanako da belong ko HAHAHA',
       image: '/fa.jpg',
       story: 'Katu ning time nga wa mi nag expect nga mag gray mi tanan mga kuya nimo "og makahinumdom ka" HAHAHAHAHA chill2 ra ta ninyu diri nya inom sila ginagmay HAHAHA sila ra ha',    },
-  ]
+  {
+    id: 8,
+      date: 'March 18, 2026',
+      title: 'Bossmanok',
+      icon: '/bm.jpg',
+      description: 'Pakan.on para di saputon',
+      image: '/bm.jpg',
+      story: 'Grabe kag expectation sa inyung unliwings pero wa madayun, pero dikom sugot maguol akong baby dad on dayun og unliwings HAHAHA', },
+      {
+    id: 9,
+      date: 'March 18, 2026',
+      title: 'Sine Date',
+      icon: '/mm.jpg',
+      description: 'Iyakin',
+      image: '/mm.jpg',
+      story: '"di lagi kom hilak" HAHAHAHAHA dindooooo HAHAHAHAHAHAHAA', }, 
+        {
+        id: 10,
+      date: 'March 27, 2026',
+      title: 'Mt.View',
+      icon: '/by.jpg',
+      description: 'From cafe to mt.view',
+      image: '/by.jpg',
+      story: 'From cafe to Mt.view ba HAHAHA, andoks lang ang baon, napiyok pa pagbabye sa vc sa imong friends HAHAHAHA', },     
+       {
+        id: 11,
+      date: 'April 08, 2026',
+      title: 'Coke Tumbler',
+      icon: '/ck.jpg',
+      description: 'Bawalan mag coke pero gipangitaan jug sudlanan',
+      image: '/ck.jpg',
+      story: 'TBHHHHH, na feel kaayu nako nga happy kayka nakuha nimo ang tumbler "inpired na mag coke" happy kayko makita ka nga happy babyyy', },
+      {
+        id: 12,
+      date: 'March 23, 2026',
+      title: 'SHAWARMAAAAAA',
+      icon: '/js.jpg',
+      description: 'Thanks sa libre babyyyz ',
+      image: '/js.jpg',
+      story: 'Thanks sa libre babyyyy, FAVVVV SHAWARMAAAA kuhang-kuha mo talaga gusto ko baby, mwamwaaaa', },
+      {
+        id: 13,
+      date: 'April 04, 2026',
+      title: 'HERMITS COVE',
+      icon: '/tr.jpg',
+      description: 'Pa dungog2 kas tiktok ha, adtuon dayun HAHAHA',
+      image: '/tr.jpg',
+      story: 'Ganahan kayko dad.on kag hermits, aside sa nagpadungog2 ka, reward sad ko na nimo kay drained ka ana nga week', },     
+       {
+        id: 14,
+      date: 'April 15, 2026',
+      title: 'Mt.view shots',
+      icon: '/aa.jpg',
+      description: 'Tagay with Baby HAHAHAHA',
+      image: '/aa.jpg',
+      story: 'FIRST KISSS SA LIPSSSS KILIG KAAAYU SHITTTT, DIPA KO GANAHAN MOULI JUD ATU NGA TIME KAY GANAHANA PA KO MAKAUBAN KA, ILOVEYOUBABYYYY', },
+      {
+        id: 15,
+      date: 'April 03, 2026',
+      title: 'Family picture?',
+      icon: '/or.jpg',
+      description: 'Nag Picture nalang tag atua kay wala na sila, dina ka mauwaw',
+      image: '/or.jpg',
+      story: 'Naka pabor og picture kay wala na sila bayaw HAHAHAHAHAHAH, kana nga time kabantay najuds neil HAHAHAHAHAHAHA', },
+      {
+        id: 16,
+      title: 'ROSITTTTTT',
+      icon: '/rt.jpg',
+      description: 'Thanks sa pagbadlung sakong baby, sittt',
+      image: '/rt.jpg',
+      story: 'Thanks Rosit kay mobadlung kang "noems", na appreciate kaayu tika SITTTT. Salamat sa pagkabuotan nga friend sakong baby HAHAHAHA actually, ninyu tanan friend sakong baby, very healthy circle. Thank youuu!', 
+    },
+       ]
+
+
 
   return (
     <div className="memory-timeline">
