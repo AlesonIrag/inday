@@ -14,7 +14,6 @@ function LoveLetter() {
     '/q.png',
     '/t.png',
     '/w.png',
-    '/a.png',
     '/caf.jpg',
    '/er.jpg',
    '/py.jpg',
