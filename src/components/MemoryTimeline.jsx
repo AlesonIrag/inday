@@ -145,14 +145,6 @@ function MemoryTimeline() {
       description: 'Nag Picture nalang tag atua kay wala na sila, dina ka mauwaw',
       image: '/or.jpg',
       story: 'Naka pabor og picture kay wala na sila bayaw HAHAHAHAHAHAH, kana nga time kabantay najuds neil HAHAHAHAHAHAHA', },
-      {
-        id: 16,
-      title: 'ROSITTTTTT',
-      icon: '/rt.jpg',
-      description: 'Thanks sa pagbadlung sakong baby, sittt',
-      image: '/rt.jpg',
-      story: 'Thanks Rosit kay mobadlung kang "noems", na appreciate kaayu tika SITTTT. Salamat sa pagkabuotan nga friend sakong baby HAHAHAHA actually, ninyu tanan friend sakong baby, very healthy circle. Thank youuu!', 
-    },
        ]
 
 
