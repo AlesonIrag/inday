@@ -15,6 +15,20 @@ function LoveLetter() {
     '/t.png',
     '/w.png',
     '/a.png',
+    '/caf.jpg',
+   '/er.jpg',
+   '/py.jpg',
+   '/qy.jpg',
+   '/vv.jpg',
+   '/ww.jpeg',
+   '/zz.jpg',
+   '/xx.jpg',
+   '/uu.jpg',
+   '/tm.jpg',
+   '/mwa.jpg',
+   '/bb.jpg',
+
+
   ]
 
   useEffect(() => {
