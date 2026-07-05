@@ -1,4 +1,4 @@
-.floating-flowers {
+.floating-flowers-garden {
   position: fixed;
   top: 0;
   left: 0;
@@ -6,54 +6,92 @@
   height: 100%;
   pointer-events: none;
   overflow: hidden;
-  z-index: 999;
-  animation: fadeInFlowers 1s ease-in;
+  z-index: 999; /* Float in front of slideshow and button */
+  animation: fadeInGarden 0.8s ease-in;
 }
 
-.flower {
+@keyframes fadeInGarden {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Fall path: downward climb + gentle horizontal sway */
+.garden-path-container {
   position: absolute;
-  bottom: -100px;
-  animation: floatUpFlower linear infinite;
+  top: -65px;
+  animation: fallDownPath linear infinite;
   opacity: 0;
-  filter: drop-shadow(0 0 10px rgba(255, 105, 180, 0.6));
 }
 
-@keyframes fadeInFlowers {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+.garden-body {
+  display: inline-block;
+  will-change: transform;
 }
 
-@keyframes floatUpFlower {
+/* Specific flower glows */
+.garden-body.type-rose,
+.garden-body.type-blossom,
+.garden-body.type-hibiscus,
+.garden-body.type-tulip {
+  filter: drop-shadow(0 0 8px rgba(255, 74, 133, 0.45));
+  animation: slowSpin 10s linear infinite;
+}
+
+/* Flapping Butterfly wings simulation */
+.garden-body.type-butterfly {
+  filter: drop-shadow(0 0 12px rgba(138, 43, 226, 0.5));
+  transform-origin: center;
+  animation: butterflyFlap 0.14s alternate infinite ease-in-out;
+}
+
+@keyframes fallDownPath {
   0% {
-    bottom: -100px;
+    top: -65px;
     opacity: 0;
-    transform: translateX(0) rotate(0deg) scale(0.5);
+    transform: translateX(0);
   }
-  10% {
-    opacity: 1;
+  8% {
+    opacity: 0.85;
   }
-  90% {
-    opacity: 1;
+  33% {
+    transform: translateX(45px);
+  }
+  66% {
+    transform: translateX(-45px);
+  }
+  92% {
+    opacity: 0.85;
   }
   100% {
-    bottom: 110%;
+    top: 110%;
     opacity: 0;
-    transform: translateX(150px) rotate(720deg) scale(1.2);
+    transform: translateX(20px);
   }
 }
 
+/* Butterfly Flapping wings keyframes */
+@keyframes butterflyFlap {
+  0% {
+    transform: scaleX(1) rotate(6deg);
+  }
+  100% {
+    transform: scaleX(0.2) rotate(-6deg);
+  }
+}
+
+/* Slow spin for flowers */
+@keyframes slowSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive adjustment */
 @media (max-width: 768px) {
-  .flower {
-    font-size: 25px !important;
-  }
-}
-
-@media (max-width: 480px) {
-  .flower {
-    font-size: 20px !important;
+  .garden-path-container {
+    font-size: 22px !important;
   }
 }

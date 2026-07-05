@@ -1,11 +1,41 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import LandingPage from './components/LandingPage'
 import SelectionScreen from './components/SelectionScreen'
 import LoveLetter from './components/LoveLetter'
 import MemoryTimeline from './components/MemoryTimeline'
-import FloatingHearts from './components/FloatingHearts'
-import FloatingFlowers from './components/FloatingFlowers'
+import BucketList from './components/BucketList'
+
+// Shared working photo assets list (100% verified to load correctly)
+const bgImages = [
+  '/q.jpg',
+  '/rt.jpg',
+  '/rrt.jpg',
+  '/rrrt.jpg',
+  '/tog (1).jpeg',
+  '/gd.jpeg',
+  '/tog (3).jpeg',
+  '/tog (4).jpeg',
+  '/cy.jpeg',
+  '/tog (7).jpeg',
+  '/msr.jpeg',
+  '/tog (9).jpeg',
+  '/wwq.jpg',
+  '/we.jpg',
+   '/zxc.jpg',
+  '/fd.jpeg',
+  '/sd.jpg',
+  '/td.jpg',
+  '/db.jpg',
+  '/sr.jpeg',
+  '/yt.jpg',
+  '/aa.jpg',
+  '/by.jpg',
+  '/mm.jpg',
+  '/or.jpg',
+  
+   
+]
 
 function App() {
   const [started, setStarted] = useState(false)
@@ -14,150 +44,166 @@ function App() {
   const [currentSection, setCurrentSection] = useState('letter')
   const [currentBgImage, setCurrentBgImage] = useState(0)
   const [currentSongIndex, setCurrentSongIndex] = useState(0)
-  const [showMusicPrompt, setShowMusicPrompt] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
-
-  const bgImages = ['/fd.jpeg', '/sd.jpg', '/td.jpg', '/sr.jpeg', '/yt.jpg','/aa.jpg','/by.jpg', '/or.jpg', '/mm.jpg', '/gg.jpg']
+  
+  // Audio state sync
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration, setDuration] = useState(0)
+  const [volume, setVolume] = useState(0.7)
+  const [isCollapsed, setIsCollapsed] = useState(true)
+  const [hasInteracted, setHasInteracted] = useState(false)
+  const [prevVolume, setPrevVolume] = useState(0.7)
+  const [userPaused, setUserPaused] = useState(false)
 
   const playlist = [
-    '/Paul Partohap - P.S. I LOVE YOU (Lyric Video).mp3',
-    '/Daniel Caesar & H.E.R. - Best Part, a Visual.mp3'
+    { title: 'P.S. I LOVE YOU - Paul Partohap', url: '/Paul Partohap - P.S. I LOVE YOU (Lyric Video).mp3' },
+    { title: 'Best Part - Daniel Caesar & H.E.R.', url: '/Daniel Caesar & H.E.R. - Best Part, a Visual.mp3' },
+    { title: 'When I Met You - APO Hiking Society', url: '/APO Hiking Society - When I Met You (Official Lyric Video).mp3' }
   ]
 
-  // Create audio element ONCE and keep it persistent
-  const [audio] = useState(() => {
-    const audioEl = new Audio(playlist[0])
-    audioEl.volume = 0.7
-    audioEl.loop = false
-    audioEl.preload = 'auto'
-    return audioEl
-  })
+  // Persistent audio reference on window to prevent duplicate instantiation on HMR/re-mounts
+  if (!window.__globalAudio__) {
+    window.__globalAudio__ = new Audio(playlist[0].url)
+    window.__globalAudio__.volume = volume
+    window.__globalAudio__.loop = false
+    window.__globalAudio__.preload = 'auto'
+  }
+  const audio = window.__globalAudio__
 
-  // SUPER AGGRESSIVE autoplay - try muted first, then unmute (works on mobile)
+  // Autoplay attempt
   useEffect(() => {
-    const attemptAutoplay = async () => {
+    const attemptPlay = async () => {
       try {
-        // Try playing with sound first
-        audio.volume = 0.5
-        audio.muted = false
         await audio.play()
         setIsPlaying(true)
-        setTimeout(() => { audio.volume = 0.7 }, 1000)
-        console.log('Autoplay with sound successful!')
-        return true
-      } catch (error) {
-        console.log('Autoplay with sound blocked, trying muted:', error)
-        try {
-          // Try muted autoplay (allowed on mobile)
-          audio.muted = true
-          await audio.play()
-          // Unmute after a tiny delay
-          setTimeout(() => {
-            audio.muted = false
-            audio.volume = 0.7
-            setIsPlaying(true)
-            console.log('Muted autoplay successful, unmuted!')
-          }, 50)
-          return true
-        } catch (mutedError) {
-          console.log('Even muted autoplay blocked:', mutedError)
-          return false
-        }
+        setHasInteracted(true)
+      } catch (err) {
+        console.log('Autoplay blocked. Waiting for user interaction.', err)
       }
     }
     
-    // Try MANY times at different intervals
-    attemptAutoplay()
-    const timer1 = setTimeout(attemptAutoplay, 50)
-    const timer2 = setTimeout(attemptAutoplay, 100)
-    const timer3 = setTimeout(attemptAutoplay, 300)
-    const timer4 = setTimeout(attemptAutoplay, 500)
-    const timer5 = setTimeout(attemptAutoplay, 1000)
-    const timer6 = setTimeout(attemptAutoplay, 2000)
+    // Play audio
+    attemptPlay()
     
+    // Setup time and duration event listeners
+    const handleTimeUpdate = () => setCurrentTime(audio.currentTime)
+    const handleLoadedMetadata = () => setDuration(audio.duration)
+    const handleSongEnd = () => handleNextSong()
+
+    audio.addEventListener('timeupdate', handleTimeUpdate)
+    audio.addEventListener('loadedmetadata', handleLoadedMetadata)
+    audio.addEventListener('ended', handleSongEnd)
+
     return () => {
-      clearTimeout(timer1)
-      clearTimeout(timer2)
-      clearTimeout(timer3)
-      clearTimeout(timer4)
-      clearTimeout(timer5)
-      clearTimeout(timer6)
+      audio.removeEventListener('timeupdate', handleTimeUpdate)
+      audio.removeEventListener('loadedmetadata', handleLoadedMetadata)
+      audio.removeEventListener('ended', handleSongEnd)
     }
   }, [audio])
 
-  // Handle enabling music when user clicks
-  const enableMusic = () => {
-    audio.muted = false
-    audio.volume = 0.7
-    audio.play().catch(e => console.log('Play failed:', e))
-    setIsPlaying(true)
+  // Watch interaction for autoplay bypass
+  useEffect(() => {
+    if (hasInteracted) return
+
+    const startOnInteraction = () => {
+      if (userPaused) return
+      audio.play().then(() => {
+        setIsPlaying(true)
+        setHasInteracted(true)
+      }).catch(err => console.log('Bypass failed', err))
+    }
+    const events = ['click', 'touchstart', 'keydown']
+    events.forEach(e => document.addEventListener(e, startOnInteraction, { once: true, passive: true }))
+    return () => events.forEach(e => document.removeEventListener(e, startOnInteraction))
+  }, [audio, hasInteracted, userPaused])
+
+  const handlePlayPause = (e) => {
+    if (e) e.stopPropagation()
+    setHasInteracted(true)
+    if (isPlaying) {
+      audio.pause()
+      setIsPlaying(false)
+      setUserPaused(true)
+    } else {
+      audio.play().then(() => {
+        setIsPlaying(true)
+        setUserPaused(false)
+      }).catch(e => console.log(e))
+    }
   }
 
-  // Start playing music on ANY user interaction (backup for mobile)
-  useEffect(() => {
-    const handleFirstInteraction = () => {
-      if (!isPlaying) {
-        audio.muted = false
-        audio.volume = 0.7
-        audio.play().then(() => {
-          setIsPlaying(true)
-          console.log('Music started on user interaction!')
-        }).catch((error) => {
-          console.log('Play on interaction failed:', error)
-        })
-      }
-    }
-    
-    // Listen for ALL possible interaction events
-    const events = ['click', 'touchstart', 'touchend', 'touchmove', 'scroll', 'keydown']
-    events.forEach(event => {
-      document.addEventListener(event, handleFirstInteraction, { once: true, passive: true })
-    })
-    
-    return () => {
-      events.forEach(event => {
-        document.removeEventListener(event, handleFirstInteraction)
-      })
-    }
-  }, [audio, isPlaying])
+  const handleNextSong = (e) => {
+    if (e) e.stopPropagation()
+    setHasInteracted(true)
+    const nextIdx = (currentSongIndex + 1) % playlist.length
+    setCurrentSongIndex(nextIdx)
+    audio.src = playlist[nextIdx].url
+    audio.volume = volume // Maintain volume level across song changes
+    audio.play().then(() => {
+      setIsPlaying(true)
+    }).catch(e => console.log(e))
+  }
 
-  // Handle song changes
-  useEffect(() => {
-    const handleSongEnd = () => {
-      const nextIndex = (currentSongIndex + 1) % playlist.length
-      setCurrentSongIndex(nextIndex)
-      audio.src = playlist[nextIndex]
-      audio.play().catch(e => console.log('Next song failed:', e))
+  const handlePrevSong = (e) => {
+    if (e) e.stopPropagation()
+    setHasInteracted(true)
+    const prevIdx = (currentSongIndex - 1 + playlist.length) % playlist.length
+    setCurrentSongIndex(prevIdx)
+    audio.src = playlist[prevIdx].url
+    audio.volume = volume // Maintain volume level across song changes
+    audio.play().then(() => {
+      setIsPlaying(true)
+    }).catch(e => console.log(e))
+  }
+
+  const handleProgressChange = (e) => {
+    const newTime = parseFloat(e.target.value)
+    audio.currentTime = newTime
+    setCurrentTime(newTime)
+  }
+
+  const handleToggleMute = (e) => {
+    e.stopPropagation()
+    if (volume > 0) {
+      setPrevVolume(volume)
+      audio.volume = 0
+      setVolume(0)
+    } else {
+      audio.volume = prevVolume
+      setVolume(prevVolume)
     }
-    
-    audio.addEventListener('ended', handleSongEnd)
-    
-    return () => {
-      audio.removeEventListener('ended', handleSongEnd)
+  }
+
+  const handleVolumeChange = (e) => {
+    const newVol = parseFloat(e.target.value)
+    audio.volume = newVol
+    setVolume(newVol)
+    if (newVol > 0) {
+      setPrevVolume(newVol)
     }
-  }, [audio, currentSongIndex, playlist])
+  }
+
+  const formatTime = (time) => {
+    if (isNaN(time)) return '0:00'
+    const mins = Math.floor(time / 60)
+    const secs = Math.floor(time % 60)
+    return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
 
   useEffect(() => {
     if (showFlowers) {
       const interval = setInterval(() => {
         setCurrentBgImage((prevIndex) => (prevIndex + 1) % bgImages.length)
-      }, 3000)
+      }, 3500)
       return () => clearInterval(interval)
     }
-  }, [showFlowers, bgImages.length])
-
-  useEffect(() => {
-    localStorage.removeItem('valentineStarted')
-    localStorage.removeItem('valentineSection')
-  }, [])
+  }, [showFlowers])
 
   const handleStart = () => {
-    // Ensure audio plays when user clicks the landing page button
-    if (!isPlaying) {
-      audio.play().catch((error) => {
-        console.log('Audio play failed:', error)
-      })
-      setIsPlaying(true)
+    if (!isPlaying && !userPaused) {
+      audio.play().then(() => {
+        setIsPlaying(true)
+      }).catch(err => console.log(err))
     }
     setShowFlowers(true)
   }
@@ -179,11 +225,7 @@ function App() {
   const handleSelection = (selection) => {
     setStarted(true)
     setShowSelection(false)
-    const sectionMap = {
-      'message': 'letter',
-      'timeline': 'timeline'
-    }
-    setCurrentSection(sectionMap[selection] || 'letter')
+    setCurrentSection(selection)
   }
 
   const renderSection = () => {
@@ -192,6 +234,8 @@ function App() {
         return <LoveLetter />
       case 'timeline':
         return <MemoryTimeline />
+      case 'bucketlist':
+        return <BucketList />
       default:
         return <LoveLetter />
     }
@@ -199,9 +243,78 @@ function App() {
 
   return (
     <div className="app">
-      <FloatingHearts />
-      {showFlowers && <FloatingFlowers />}
+
+      {/* Floating Modern Media Player Widget */}
+      <div 
+        className={`floating-music-player glass-panel ${isCollapsed ? 'collapsed' : ''}`}
+        onClick={() => {
+          if (isCollapsed) setIsCollapsed(false)
+        }}
+        title={isCollapsed ? "Click to open music controls" : ""}
+      >
+        <button 
+          className="minimize-btn" 
+          onClick={(e) => {
+            e.stopPropagation()
+            setIsCollapsed(true)
+          }} 
+          title="Minimize Player"
+        >
+          ×
+        </button>
+
+        <div className="player-disc-wrapper">
+          <div className={`player-disc ${isPlaying ? 'rotating' : ''}`}>
+            🎵
+          </div>
+        </div>
+        
+        <div className="player-details">
+          <div className="player-track-scroll">
+            <span className="player-track-title">{playlist[currentSongIndex].title}</span>
+          </div>
+          
+          <div className="player-controls">
+            <button className="ctrl-btn" onClick={handlePrevSong} title="Previous Song">⏮</button>
+            <button className="ctrl-btn play-pause-btn" onClick={handlePlayPause} title={isPlaying ? "Pause" : "Play"}>
+              {isPlaying ? "⏸" : "▶"}
+            </button>
+            <button className="ctrl-btn" onClick={handleNextSong} title="Next Song">⏭</button>
+          </div>
+
+          <div className="player-progress-bar-slot">
+            <span className="time-lbl">{formatTime(currentTime)}</span>
+            <input 
+              type="range"
+              min={0}
+              max={duration || 100}
+              value={currentTime}
+              onChange={handleProgressChange}
+              className="player-slider"
+            />
+            <span className="time-lbl">{formatTime(duration)}</span>
+          </div>
+        </div>
+
+        {/* Volume slider overlay on hover */}
+        <div className="player-volume-control" onClick={handleToggleMute} title={volume === 0 ? "Unmute" : "Mute"}>
+          <span className="vol-icon">
+            {volume === 0 ? '🔇' : volume < 0.4 ? '🔈' : '🔊'}
+          </span>
+          <input 
+            type="range"
+            min={0}
+            max={1}
+            step={0.01}
+            value={volume}
+            onChange={handleVolumeChange}
+            onClick={(e) => e.stopPropagation()}
+            className="player-volume-slider"
+          />
+        </div>
+      </div>
       
+
       {!started && !showSelection && !showFlowers ? (
         <LandingPage onStart={handleStart} />
       ) : !started && (showSelection || showFlowers) ? (
@@ -211,22 +324,36 @@ function App() {
               ←
             </button>
             <div className="flowers-transition">
-              <div className="flowers-bg-slideshow">
-                {bgImages.map((image, index) => (
-                  <div
-                    key={index}
-                    className={`flowers-bg-image ${index === currentBgImage ? 'active' : ''}`}
-                    style={{ backgroundImage: `url(${image})` }}
-                  />
-                ))}
-                <div className="flowers-bg-overlay"></div>
-              </div>
-              <div className="flowers-content">
-                <h1 className="flowers-message">Happy Valentine's Day, Baby♡</h1>
-                <button className="continue-button" onClick={handleContinue}>
-                  <span className="button-text-default">Long press Baby</span>
-                  <span className="button-text-hover">I love You, Baby♡</span>
-                </button>
+              {/* Glassmorphic centerpiece note container */}
+              <div className="transition-card-wrapper">
+                <div className="transition-card glass-panel">
+                  {/* Photo Frame showing the current image cleanly and sharply */}
+                  <div className="transition-photo-frame">
+                    <img 
+                      src={bgImages[currentBgImage]} 
+                      alt="Our memories Background" 
+                      className="transition-photo-img-blur"
+                    />
+                    <img 
+                      src={bgImages[currentBgImage]} 
+                      alt="Our memories" 
+                      className="transition-photo-img-main"
+                      onError={(e) => {
+                        // Fallback in case of any loading glitch
+                        e.target.src = '/gf.jpeg'
+                      }}
+                    />
+                  </div>
+                  
+                  {/* Text details & button below */}
+                  <div className="transition-details">
+                    <h1 className="flowers-message">Our picture together♡</h1>
+                    <button className="continue-button" onClick={handleContinue}>
+                      <span className="button-text-default">Long Press Baby</span>
+                      <span className="button-text-hover">I Love You, Baby ♡</span>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </>
@@ -239,9 +366,10 @@ function App() {
             setStarted(false)
             setShowSelection(true)
             setShowFlowers(false)
-          }} title="Back">
+          }} title="Back to Dashboard">
             ←
           </button>
+          
           <div className="content-container">
             {renderSection()}
           </div>

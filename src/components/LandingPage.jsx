@@ -2,12 +2,22 @@ import { useState, useEffect, useMemo } from 'react'
 import './LandingPage.css'
 
 function LandingPage({ onStart }) {
-  const [showText, setShowText] = useState(false)
+  const [showCard, setShowCard] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [loadedImages, setLoadedImages] = useState([])
   
-  // Add your images here - put them in the public folder
+  // Array of local pictures
   const images = [
+     '/ptry (1).png',
+    '/ptry (2).jpeg',
+    '/ptry (3).jpeg',
+    '/ptry (4).jpeg',
+    '/ptry (5).jpeg',
+    '/ptry (6).jpeg',
+    '/ptry (7).jpeg',
+    '/ptry (8).jpeg',
+    '/ptry (9).jpeg',
+    '/ptry (10).jpeg',
+    '/ptry (11).jpeg',
     '/mwa.jpg',
     '/gf.jpeg',
     '/caf.jpg',
@@ -28,216 +38,102 @@ function LandingPage({ onStart }) {
     '/qy.jpg',
     '/t.png',
     '/w.png',
+    '/aaa.jpg',
+    '/e.jpg',
+    '/ssa.jpg',
+    '/rr.jpg',
+    '/fg.jpg',
+    '/o.jpg',
+    '/p.jpg',
+    '/www.jpg',
+    '/z.jpg',
+    '/zz.jpg',
+    '/zzz.jpg',
+   
+    
+
   ]
 
-  // Generate floating elements for LEFT side only - memoized to prevent reset
-  const floatingHeartsLeft = useMemo(() => Array.from({ length: 8 }, (_, i) => ({
-    id: i,
-    emoji: ['♡', '💖', '💗', '🦋', '❤️', '💓'][Math.floor(Math.random() * 6)],
-    left: `${Math.random() * 15}%`, // Only 0-15% (left side)
-    delay: `${Math.random() * 10}s`,
-    duration: `${8 + Math.random() * 8}s`,
-    size: `${28 + Math.random() * 20}px`
-  })), [])
-
-  // Generate floating elements for RIGHT side only - memoized to prevent reset
-  const floatingHeartsRight = useMemo(() => Array.from({ length: 8 }, (_, i) => ({
-    id: i,
-    emoji: ['♡', '💖', '💗', '🦋', '❤️', '💓'][Math.floor(Math.random() * 6)],
-    left: `${85 + Math.random() * 15}%`, // Only 85-100% (right side)
-    delay: `${Math.random() * 10}s`,
-    duration: `${8 + Math.random() * 8}s`,
-    size: `${28 + Math.random() * 20}px`
-  })), [])
-
-  const floatingFlowersLeft = useMemo(() => Array.from({ length: 6 }, (_, i) => ({
-    id: i,
-    emoji: ['🌹', '🌺', '🌸', '🌼', '🌻', '💐'][Math.floor(Math.random() * 6)],
-    left: `${Math.random() * 15}%`, // Only 0-15% (left side)
-    delay: `${Math.random() * 10}s`,
-    duration: `${10 + Math.random() * 10}s`,
-    size: `${32 + Math.random() * 24}px`
-  })), [])
-
-  const floatingFlowersRight = useMemo(() => Array.from({ length: 6 }, (_, i) => ({
-    id: i,
-    emoji: ['🌹', '🌺', '🌸', '🌼', '🌻', '💐'][Math.floor(Math.random() * 6)],
-    left: `${85 + Math.random() * 15}%`, // Only 85-100% (right side)
-    delay: `${Math.random() * 10}s`,
-    duration: `${10 + Math.random() * 10}s`,
-    size: `${32 + Math.random() * 24}px`
-  })), [])
-
-  const floatingButterfliesLeft = useMemo(() => Array.from({ length: 5 }, (_, i) => ({
-    id: i,
-    emoji: '🦋',
-    left: `${Math.random() * 15}%`, // Only 0-15% (left side)
-    delay: `${Math.random() * 10}s`,
-    duration: `${12 + Math.random() * 8}s`,
-    size: `${35 + Math.random() * 20}px`
-  })), [])
-
-  const floatingButterfliesRight = useMemo(() => Array.from({ length: 5 }, (_, i) => ({
-    id: i,
-    emoji: '🦋',
-    left: `${85 + Math.random() * 15}%`, // Only 85-100% (right side)
-    delay: `${Math.random() * 10}s`,
-    duration: `${12 + Math.random() * 8}s`,
-    size: `${35 + Math.random() * 20}px`
-  })), [])
-
   useEffect(() => {
-    // Load all images immediately
-    setLoadedImages(images)
-    setTimeout(() => setShowText(true), 1500)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Show components with elegant delayed fade-in
+    const timer = setTimeout(() => setShowCard(true), 600)
+    return () => clearTimeout(timer)
   }, [])
 
   useEffect(() => {
-    if (loadedImages.length > 1) {
-      // Start slideshow - change image every 5 seconds
+    if (images.length > 1) {
+      // Slideshow interval matching the Ken Burns motion effect
       const interval = setInterval(() => {
-        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % loadedImages.length)
+        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length)
       }, 5000)
       
       return () => clearInterval(interval)
     }
-  }, [loadedImages.length])
+  }, [images.length])
 
   return (
     <div className="landing-page">
-      {/* Floating Hearts */}
-      <div className="landing-floating-hearts">
-        {floatingHeartsLeft.map((heart) => (
-          <div
-            key={`heart-left-${heart.id}`}
-            className="landing-heart"
-            style={{
-              left: heart.left,
-              animationDelay: heart.delay,
-              animationDuration: heart.duration,
-              fontSize: heart.size
-            }}
-          >
-            {heart.emoji}
+      {/* Split-Screen Main Wrapper */}
+      <div className={`landing-main-wrapper ${showCard ? 'visible' : ''}`}>
+        
+        {/* Left Column: Premium Polaroid Slideshow Frame (100% visible) */}
+        <div className="landing-photo-column">
+          <div className="landing-photo-frame-outer">
+            <div className="landing-photo-washi-tape"></div>
+            <div className="landing-photo-slideshow">
+              {images.map((image, index) => (
+                <div
+                  key={index}
+                  className={`slideshow-container ${index === currentImageIndex ? 'active' : ''}`}
+                >
+                  {/* Blurred Background Copy */}
+                  <img
+                    src={image}
+                    alt="Our Story Background"
+                    className="slideshow-image-blur"
+                    onError={(e) => {
+                      e.target.style.display = 'none'
+                    }}
+                  />
+                  {/* Sharp Contained Foreground */}
+                  <img
+                    src={image}
+                    alt="Our Story"
+                    className="slideshow-image-main"
+                    onError={(e) => {
+                      e.target.style.display = 'none'
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="photo-frame-label">I love you, Baby♡</div>
           </div>
-        ))}
-        {floatingHeartsRight.map((heart) => (
-          <div
-            key={`heart-right-${heart.id}`}
-            className="landing-heart"
-            style={{
-              left: heart.left,
-              animationDelay: heart.delay,
-              animationDuration: heart.duration,
-              fontSize: heart.size
-            }}
-          >
-            {heart.emoji}
-          </div>
-        ))}
-      </div>
-
-      {/* Floating Flowers */}
-      <div className="landing-floating-flowers">
-        {floatingFlowersLeft.map((flower) => (
-          <div
-            key={`flower-left-${flower.id}`}
-            className="landing-flower"
-            style={{
-              left: flower.left,
-              animationDelay: flower.delay,
-              animationDuration: flower.duration,
-              fontSize: flower.size
-            }}
-          >
-            {flower.emoji}
-          </div>
-        ))}
-        {floatingFlowersRight.map((flower) => (
-          <div
-            key={`flower-right-${flower.id}`}
-            className="landing-flower"
-            style={{
-              left: flower.left,
-              animationDelay: flower.delay,
-              animationDuration: flower.duration,
-              fontSize: flower.size
-            }}
-          >
-            {flower.emoji}
-          </div>
-        ))}
-      </div>
-
-      {/* Floating Butterflies */}
-      <div className="landing-floating-butterflies">
-        {floatingButterfliesLeft.map((butterfly) => (
-          <div
-            key={`butterfly-left-${butterfly.id}`}
-            className="landing-butterfly"
-            style={{
-              left: butterfly.left,
-              animationDelay: butterfly.delay,
-              animationDuration: butterfly.duration,
-              fontSize: butterfly.size
-            }}
-          >
-            {butterfly.emoji}
-          </div>
-        ))}
-        {floatingButterfliesRight.map((butterfly) => (
-          <div
-            key={`butterfly-right-${butterfly.id}`}
-            className="landing-butterfly"
-            style={{
-              left: butterfly.left,
-              animationDelay: butterfly.delay,
-              animationDuration: butterfly.duration,
-              fontSize: butterfly.size
-            }}
-          >
-            {butterfly.emoji}
-          </div>
-        ))}
-      </div>
-
-      <div className="photo-background">
-        {loadedImages.length === 0 ? (
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            background: 'linear-gradient(135deg, #ff69b4, #ff1493)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'white',
-            fontSize: '24px'
-          }}>
-            Loading images...
-          </div>
-        ) : (
-          loadedImages.map((image, index) => (
-            <img
-              key={index}
-              src={image}
-              alt="Slideshow"
-              className={`slideshow-image ${index === currentImageIndex ? 'active' : ''}`}
-            />
-          ))
-        )}
-        <div className="photo-overlay"></div>
-      </div>
-      
-      {showText && (
-        <div className="subtle-text" onClick={onStart}>
-          <span className="button-text-default">Open it baby♡</span>
-          <span className="button-text-hover">I love you ♡</span>
         </div>
-      )}
+
+        {/* Right Column: Glassmorphic Centerpiece Card */}
+        <div className="landing-card-column">
+          <div className="centerpiece-card glass-panel">
+            <div className="card-decorations">
+              <span className="sparkle top-left">♡</span>
+              <span className="sparkle top-right">♡</span>     
+            </div>
+            
+            <h2 className="greeting-pretitle">I love you, Baby♡</h2>
+            <h1 className="greeting-title">Hello Baby,</h1>
+            <p className="greeting-message">
+              I made this to keep our sweet memories alive forever. I hope this brings a big smile to your pretty face♡
+            </p>
+            
+            <button className="start-gift-button" onClick={onStart}>
+              <span className="button-label-default">Open It, Baby ♡</span>
+              <span className="button-label-hover">I Love You So Much ♡</span>
+              <div className="button-glow"></div>
+            </button>
+          </div>
+        </div>
+
+      </div>
     </div>
   )
 }

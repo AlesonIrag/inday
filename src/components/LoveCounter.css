@@ -1,0 +1,201 @@
+.love-counter-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1000px;
+  padding: 80px 24px;
+  animation: fadeIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.counter-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.counter-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 42px;
+  color: var(--text-dark);
+  margin-bottom: 12px;
+}
+
+.counter-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  color: var(--text-muted);
+  font-weight: 350;
+}
+
+/* Clock Grid Layout */
+.clock-grid {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-bottom: 70px;
+}
+
+.clock-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+  padding: 25px 15px;
+  border-radius: var(--border-radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.35);
+  box-shadow: var(--glass-shadow);
+  transition: var(--transition-smooth);
+}
+
+.clock-slot:hover {
+  transform: translateY(-8px);
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.clock-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 56px;
+  font-weight: 700;
+  color: var(--primary-rose);
+  line-height: 1;
+}
+
+.glow-text {
+  text-shadow: 0 0 15px rgba(255, 74, 133, 0.3),
+               0 0 30px rgba(255, 74, 133, 0.15);
+}
+
+.clock-tag {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-top: 12px;
+}
+
+/* Milestones Section */
+.milestones-section {
+  width: 100%;
+  text-align: center;
+}
+
+.milestones-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  color: var(--text-dark);
+  margin-bottom: 35px;
+  position: relative;
+}
+
+.milestones-title::after {
+  content: '♥';
+  display: block;
+  font-size: 14px;
+  color: var(--primary-pink);
+  margin-top: 8px;
+}
+
+.milestones-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+  width: 100%;
+}
+
+.milestone-card {
+  position: relative;
+  padding: 35px 25px 25px 25px;
+  border-radius: var(--border-radius-md);
+  text-align: left;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.25);
+  transition: var(--transition-smooth);
+}
+
+.milestone-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 10px 25px rgba(255, 101, 163, 0.12);
+}
+
+.milestone-badge {
+  position: absolute;
+  top: -15px;
+  left: 25px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-pink) 0%, var(--primary-rose) 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  box-shadow: 0 4px 10px rgba(255, 74, 133, 0.25);
+}
+
+.milestone-date {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary-pink);
+  letter-spacing: 0.5px;
+}
+
+.milestone-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  color: var(--text-dark);
+  margin: 8px 0 10px 0;
+}
+
+.milestone-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .counter-title {
+    font-size: 32px;
+  }
+  
+  .clock-slot {
+    min-width: 110px;
+    padding: 20px 10px;
+  }
+  
+  .clock-num {
+    font-size: 42px;
+  }
+  
+  .clock-tag {
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+}
+
+@media (max-width: 480px) {
+  .clock-grid {
+    gap: 12px;
+  }
+  
+  .clock-slot {
+    min-width: 80px;
+    flex: 1 1 80px;
+  }
+  
+  .clock-num {
+    font-size: 32px;
+  }
+}
